@@ -1,9 +1,17 @@
+import Hero from "./Hero";
+import AboutTeam from "./AboutTeam";
+import OpenRoles from "./OpenRoles";
+import ApplicationProcess from "./ApplicationProcess";
+import CareersCTA from "./CareersCTA";
 
-
-const Careers = () => {
+export default function CareersPage() {
   return (
-    <div>Careers</div>
-  )
+    <main>
+      <Hero />
+      <AboutTeam />
+      <OpenRoles />
+      <ApplicationProcess />
+      <CareersCTA />
+    </main>
+  );
 }
-
-export default Careers
