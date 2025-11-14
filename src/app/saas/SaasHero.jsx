@@ -24,7 +24,7 @@ const floatingIcons = [
 const SaaSHero = () => {
   return (
    <section
-  className="relative  min-h-[80vh] bg-[#0B0B0B] text-white overflow-hidden "
+  className="relative  min-h-[80vh] bg-[#0B0B0B] text-white overflow-hidden bg-center bg-cover bg-no-repeat "
   style={{
     backgroundImage: "url('/home/bg2.gif')",
   }}
