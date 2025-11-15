@@ -19,13 +19,13 @@ import { useState } from "react";
   ];
 
   return (
-    <header className=" sticky md:relative z-[9999] top-0 left-0 w-full bg-white backdrop-blur-md border-b border-gray-800 shadow-[0_0_15px_#0BA57F22] z-50">
+    <header className=" sticky md:relative z-[9999] bg-black top-0 left-0 w-full  backdrop-blur-md   z-50">
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         
         {/* Logo Section */}
         <Link href="/" className="flex items-center gap-3">
           <Image
-            src="/logo.png"
+            src="/logo1.png"
             alt="Venturemond Logo"
             width={80}
             height={80}
@@ -36,7 +36,7 @@ import { useState } from "react";
         </Link>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex gap-8 text-black text-sm font-medium">
+        <ul className="hidden md:flex gap-8 text-white text-sm font-medium">
           {navLinks.map((link) => (
             <li key={link.path}>
               <Link
@@ -56,7 +56,7 @@ import { useState } from "react";
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-black"
+          className="md:hidden text-white"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           ☰

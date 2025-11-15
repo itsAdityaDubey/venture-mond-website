@@ -82,9 +82,9 @@ const SaaSHero = () => {
         transition={{ delay: 0.8, duration: 0.8 }}
         className="flex flex-col sm:flex-row justify-center gap-5 mt-14"
       >
-        <Link href="/workspace" className="btn1">
+        <a href="https://workplace.venturemond.com/" className="btn1">
           Explore Workspace
-        </Link>
+        </a>
         <Link href="/workspace-waitlist" className="btn2">
           Join Waitlist
         </Link>

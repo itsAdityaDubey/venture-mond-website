@@ -67,7 +67,7 @@ const FeaturedWorkspace = () => {
               Join Waitlist
             </Link>
             <Link
-              href="/contact?model=saas&service=workspace"
+              href="https://workplace.venturemond.com/"
               className="btn2"
             >
               Request Early Access

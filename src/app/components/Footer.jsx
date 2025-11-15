@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 const Footer=()=> {
   return (
     <footer className="bg-[#0B0B0B] border-t border-gray-800 text-gray-400 ">
@@ -20,7 +20,9 @@ const Footer=()=> {
             </span>
           </Link>
           <p className="text-sm text-gray-400">
-            Innovating the Future, One Byte at a Time.
+            Venture Mond is a Next-Gen Venture Studio & SaaS Company.
+Innovating the Future, One Byte at a Time.
+Where ideas become products — and products become ventures that scale.
           </p>
         </div>
 
@@ -57,7 +59,7 @@ const Footer=()=> {
             target="_blank"
             className="text-[#0BA57F] hover:underline"
           >
-            LinkedIn →
+            <LinkedInIcon />
           </Link>
         </div>
       </div>

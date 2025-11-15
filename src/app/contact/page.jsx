@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import EmailIcon from "@mui/icons-material/Email";
@@ -8,30 +8,125 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import CallIcon from "@mui/icons-material/Call";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
-const ContactPage = () => {
-  const [division, setDivision] = useState("studio");
-  const [serviceOptions, setServiceOptions] = useState([]);
-  const [selectedService, setSelectedService] = useState("");
-  const [submited,setSubmited]=useState(true)
+// ------------------------
+//  REUSABLE CHECKBOX DROPDOWN
+// ------------------------
+const CheckboxDropdown = ({ label, options, selected, setSelected }) => {
+  const [open, setOpen] = useState(false);
 
+  const dropdownRef = useRef();
+
+  // Close dropdown on outside click
   useEffect(() => {
-    if (division === "studio") {
-      setServiceOptions([
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const toggleOption = (value) => {
+    if (selected.includes(value)) {
+      setSelected(selected.filter((item) => item !== value));
+    } else {
+      setSelected([...selected, value]);
+    }
+  };
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <label className="block mb-2 font-medium">{label}</label>
+
+      {/* Dropdown Button */}
+      <div
+        onClick={() => setOpen(!open)}
+        className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 cursor-pointer flex items-center justify-between"
+      >
+        {/* Selected Text */}
+        {selected.length === 0 ? (
+          <span className="text-gray-400">Select options</span>
+        ) : (
+          <span>{selected.join(", ")}</span>
+        )}
+
+        {/* Arrow Icon */}
+        {open ? (
+          <KeyboardArrowUpIcon className="text-gray-300" />
+        ) : (
+          <KeyboardArrowDownIcon className="text-gray-300" />
+        )}
+      </div>
+
+      {/* Dropdown List */}
+      {open && (
+        <div className="absolute w-full bg-[#111111] border border-[#0BA57F]/20 mt-2 rounded-lg max-h-48 overflow-y-auto z-20 p-3 shadow-lg">
+          {options.map((opt, i) => (
+            <label
+              key={i}
+              className="flex items-center gap-2 py-1 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                checked={selected.includes(opt)}
+                onChange={() => toggleOption(opt)}
+              />
+              <span>{opt}</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ------------------------
+//  MAIN PAGE
+// ------------------------
+const ContactPage = () => {
+  const [divisionOptions] = useState([
+    "Venturemond Studio — Build a product or startup with us",
+    "Venturemond SaaS — Explore our software solutions",
+  ]);
+
+  const [division, setDivision] = useState([]); // MULTI SELECT
+  const [serviceOptions, setServiceOptions] = useState([]);
+  const [selectedService, setSelectedService] = useState([]); // MULTI SELECT
+  const [submited, setSubmited] = useState(true);
+
+  // Update service options based on division
+  useEffect(() => {
+    let services = [];
+
+    if (
+      division.includes(
+        "Venturemond Studio — Build a product or startup with us"
+      )
+    ) {
+      services.push(
         "Research & Validation",
         "MVP / Product Development (Web, App, SaaS)",
         "Product Strategy & Roadmap",
-        "Growth & Go-To-Market",
-      ]);
-    } else {
-      setServiceOptions(["Venturemond Workspace"]);
+        "Growth & Go-To-Market"
+      );
     }
-    setSelectedService("");
+
+    if (
+      division.includes("Venturemond SaaS — Explore our software solutions")
+    ) {
+      services.push("Venturemond Workspace");
+    }
+
+    setServiceOptions(services);
+    setSelectedService([]);
   }, [division]);
 
   return (
     <section className="bg-[#0B0B0B] text-white py-24 px-6 md:px-16">
-      
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -48,9 +143,7 @@ const ContactPage = () => {
         </p>
       </motion.div>
 
-
       <div className="grid md:grid-cols-2 gap-16 max-w-6xl mx-auto">
-        
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -64,124 +157,121 @@ const ContactPage = () => {
             next venture, or explore our SaaS products for your organization.
           </p>
 
-          {submited?<form
-            onSubmit={(e) =>{ e.preventDefault() 
-                setSubmited(prev=>!prev)
-            }}
-            className="space-y-4 text-gray-300 "
-          >
-            <div>
-              <label className="block mb-2 font-medium">Name*</label>
-              <input
-                type="text"
-                placeholder="Your full name"
-                className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block mb-2 font-medium">Email*</label>
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block mb-2 font-medium">
-                Company / Startup Name (optional)
-              </label>
-              <input
-                type="text"
-                placeholder="e.g. Alpha Tech Pvt. Ltd."
-                className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
-              />
-            </div>
-
-            <div>
-              <label className="block mb-2 font-medium">
-                What are you interested in?*
-              </label>
-              <select
-                value={division}
-                onChange={(e) => setDivision(e.target.value)}
-                className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
-              >
-                <option value="studio">
-                  Venturemond Studio — Build a product or startup with us
-                </option>
-                <option value="saas">
-                  Venturemond SaaS — Explore our software solutions
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block mb-2 font-medium">Choose a Service*</label>
-              <select
-                value={selectedService}
-                onChange={(e) => setSelectedService(e.target.value)}
-                className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
-              >
-                <option value="">Select Service</option>
-                {serviceOptions.map((service, i) => (
-                  <option key={i} value={service}>
-                    {service}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block mb-2 font-medium">
-                Brief About Your Project*
-              </label>
-              <textarea
-                placeholder="Tell us about your idea, goals, or what you’re trying to build..."
-                rows={4}
-                className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
-                required
-              />
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
+          {submited ? (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setSubmited(false);
+              }}
+              className="space-y-4 text-gray-300 "
+            >
               <div>
-                <label className="block mb-2 font-medium">Budget Range</label>
-                <select className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]">
-                  <option>Under ₹2 Lakhs / $2,500</option>
-                  <option>₹2–5 Lakhs / $2,500–$6,000</option>
-                  <option>₹5–10 Lakhs / $6,000–$12,000</option>
-                  <option>Above ₹10 Lakhs / $12,000+</option>
-                </select>
+                <label className="block mb-2 font-medium">Name*</label>
+                <input
+                  type="text"
+                  placeholder="Your full name"
+                  className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
+                  required
+                />
               </div>
-
+              <div>
+                <label className="block mb-2 font-medium">Email*</label>
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
+                  required
+                />
+              </div>
               <div>
                 <label className="block mb-2 font-medium">
-                  How Soon Do You Want to Start?
+                  Company / Startup Name (optional)
                 </label>
-                <select className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]">
-                  <option>Immediately</option>
-                  <option>Within 1 month</option>
-                  <option>In 2–3 months</option>
-                  <option>Exploring for now</option>
-                </select>
+                <input
+                  type="text"
+                  placeholder="e.g. Alpha Tech Pvt. Ltd."
+                  className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
+                />
               </div>
-            </div>
+              {/* MULTI SELECT DROPDOWN 1 */}
+              <CheckboxDropdown
+                label="What are you interested in?*"
+                options={divisionOptions}
+                selected={division}
+                setSelected={setDivision}
+              />
 
-            <button
-              type="submit"
-              className="btn1"
-            >
-              Submit Inquiry
-            </button>
-          </form>:<p className="text-[#0BA57F]">"Form Submitted Successfully We will reach out you with in 48 Hours"</p>}
-       
+              {/* MULTI SELECT DROPDOWN 2 */}
+              <CheckboxDropdown
+                label="Choose a Service*"
+                options={serviceOptions}
+                selected={selectedService}
+                setSelected={setSelectedService}
+              />
+              <div>
+                <label className="block mb-2 font-medium">
+                  Brief About Your Project*
+                </label>
+                <textarea
+                  placeholder="Tell us about your idea, goals, or what you’re trying to build..."
+                  rows={4}
+                  className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
+                  required
+                />
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* BUDGET RANGE */}
+                <div>
+                  <label className="block mb-2 font-medium">
+                    Budget Range*
+                  </label>
+                  <select
+                    required
+                    defaultValue=""
+                    className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
+                  >
+                    <option value="" disabled hidden>
+                      Select Budget Range
+                    </option>
+                    <option>Under ₹2 Lakhs / $2,500</option>
+                    <option>₹2–5 Lakhs / $2,500–$6,000</option>
+                    <option>₹5–10 Lakhs / $6,000–$12,000</option>
+                    <option>Above ₹10 Lakhs / $12,000+</option>
+                  </select>
+                </div>
+                {/* TIME FRAME */}
+                <div>
+                  <label className="block mb-2 font-medium">
+                    How Soon Do You Want to Start?*
+                  </label>
+                  <select
+                    required
+                    defaultValue=""
+                    className="w-full bg-[#111111] border border-[#0BA57F]/20 rounded-lg p-3 focus:outline-none focus:border-[#0BA57F]"
+                  >
+                    <option value="" disabled hidden>
+                      Select Time Frame
+                    </option>
+                    <option>Immediately</option>
+                    <option>Within 1 month</option>
+                    <option>In 2–3 months</option>
+                    <option>Exploring for now</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" className="btn1">
+                Submit Inquiry
+              </button>
+            </form>
+          ) : (
+            <p className="text-[#0BA57F]">
+              "Form Submitted Successfully. We will reach out to you within 48
+              Hours."
+            </p>
+          )}
         </motion.div>
 
-       
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -189,9 +279,9 @@ const ContactPage = () => {
           className="space-y-6"
         >
           <h2 className="heading font-semibold mb-4">Get in touch</h2>
-          <p className="para  text-gray-400 mb-6">
-            We’re here to help you build what’s next. Select your division, share
-            your idea, and our team will get back to you within 24 hours.
+          <p className="para text-gray-400 mb-6">
+            We’re here to help you build what’s next. Select your division,
+            share your idea, and our team will get back to you within 24 hours.
           </p>
 
           <div className="space-y-4 para text-gray-300">
@@ -203,7 +293,7 @@ const ContactPage = () => {
               Square, Hitec City, Hyderabad – 500084
             </p>
             <p className="flex items-center gap-3">
-              <LinkedInIcon className="text-[#0BA57F]" />{" "}
+              <LinkedInIcon className="text-[#0BA57F]" />
               <Link
                 href="https://www.linkedin.com/company/venturemond"
                 target="_blank"
@@ -216,8 +306,7 @@ const ContactPage = () => {
         </motion.div>
       </div>
 
-      
-      <div className="text-center mt-24 space-y-3 ">
+      <div className="text-center mt-24 space-y-3">
         <h3 className="text-xl font-bold text-[#0BA57F]">
           Want to talk directly?
         </h3>
