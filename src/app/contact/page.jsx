@@ -344,12 +344,12 @@ const ContactPage = () => {
         <p className="text-gray-300 para">Reach out to our Team</p>
 
         <div className="flex justify-center gap-4 para items-center text-gray-200 mt-3">
-          <CallIcon className="text-[#0BA57F]" /> +91 9666480317
+          <CallIcon className="text-[#0BA57F]" /> +91 6302458752
           <EmailIcon className="text-[#0BA57F]" /> hello@venturemond.com
         </div>
 
         <Link
-          href="https://wa.me/919666480317"
+          href="https://wa.me/916302458752"
           target="_blank"
           className="inline-flex text-lg items-center gap-2 mt-6 text-[#0BA57F]"
         >

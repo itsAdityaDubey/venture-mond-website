@@ -66,7 +66,7 @@ Where ideas become products — and products become ventures that scale.
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-800 text-center py-4 text-xs text-gray-500">
-        © 2025 Venture Mond. All rights reserved. | Srikanth Devabattula
+        © 2025 Venture Mond. All rights reserved.
       </div>
     </footer>
   );
