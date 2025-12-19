@@ -1,1 +1,1 @@
-Live url: https://venturemond.vercel.app/
+Live url: https://venturemond.com/
